@@ -33,14 +33,14 @@ func GetMap(w http.ResponseWriter, r *http.Request) {
 }
 
 func NewMap() string {
-	mapData := ""
+	mapData := make([]byte, 0)
 
 	for i := 0; i < mapHeight; i++ {
 		for j := 0; j < mapWidth; j++ {
-			mapData += string(mapCharacters[rand.Int()%2])
+			mapData = append(mapData, mapCharacters[rand.Int()%2])
 		}
-		mapData += "\n"
+		mapData = append(mapData, '\n')
 	}
 
-	return mapData
+	return string(mapData)
 }
