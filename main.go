@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"math/rand"
 	"net/http"
@@ -30,10 +29,10 @@ func main() {
 
 func GetMap(w http.ResponseWriter, r *http.Request) {
 	data := NewMap()
-	fmt.Fprint(w, data)
+	w.Write(data)
 }
 
-func NewMap() string {
+func NewMap() []byte {
 	var (
 		mapData = make([]byte, 0, mapSize)
 		src     = rand.NewSource(time.Now().UnixNano())
@@ -46,5 +45,5 @@ func NewMap() string {
 		mapData = append(mapData, '\n')
 	}
 
-	return string(mapData)
+	return mapData
 }
