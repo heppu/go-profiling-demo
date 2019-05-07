@@ -29,3 +29,9 @@ func TestGetMap(t *testing.T) {
 		}
 	}
 }
+
+func BenchmarkGetMap(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		GetMap(httptest.NewRecorder(), httptest.NewRequest("GET", "/random/map", nil))
+	}
+}
