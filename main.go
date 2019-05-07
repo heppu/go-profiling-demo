@@ -34,13 +34,21 @@ func GetMap(w http.ResponseWriter, r *http.Request) {
 
 func NewMap() []byte {
 	var (
-		mapData = make([]byte, 0, mapSize)
-		src     = rand.NewSource(time.Now().UnixNano())
+		mapData   = make([]byte, 0, mapSize)
+		src       = rand.NewSource(time.Now().UnixNano())
+		r         = src.Int63()
+		randIndex = 0
 	)
 
 	for i := 0; i < mapHeight; i++ {
 		for j := 0; j < mapWidth; j++ {
-			mapData = append(mapData, mapCharacters[src.Int63()%2])
+			if randIndex == 63 {
+				r = src.Int63()
+				randIndex = 0
+			}
+			mapData = append(mapData, mapCharacters[r&1])
+			randIndex++
+			r >>= 1
 		}
 		mapData = append(mapData, '\n')
 	}
