@@ -7,6 +7,7 @@ import (
 	"net/http"
 	_ "net/http/pprof"
 	"runtime"
+	"time"
 )
 
 const (
@@ -33,11 +34,14 @@ func GetMap(w http.ResponseWriter, r *http.Request) {
 }
 
 func NewMap() string {
-	mapData := make([]byte, 0)
+	var (
+		mapData = make([]byte, 0)
+		src     = rand.NewSource(time.Now().UnixNano())
+	)
 
 	for i := 0; i < mapHeight; i++ {
 		for j := 0; j < mapWidth; j++ {
-			mapData = append(mapData, mapCharacters[rand.Int()%2])
+			mapData = append(mapData, mapCharacters[src.Int63()%2])
 		}
 		mapData = append(mapData, '\n')
 	}
