@@ -35,7 +35,7 @@ func GetMap(w http.ResponseWriter, r *http.Request) {
 
 func NewMap() string {
 	var (
-		mapData = make([]byte, 0)
+		mapData = make([]byte, 0, mapSize)
 		src     = rand.NewSource(time.Now().UnixNano())
 	)
 
