@@ -6,6 +6,7 @@ import (
 	"net/http"
 	_ "net/http/pprof"
 	"runtime"
+	"sync"
 	"time"
 )
 
@@ -15,7 +16,15 @@ const (
 	mapSize   = mapHeight * (mapWidth + 1)
 )
 
-var mapCharacters = "ox"
+var (
+	mapCharacters = "ox"
+
+	srcPool = &sync.Pool{
+		New: func() interface{} {
+			return rand.NewSource(time.Now().UnixNano())
+		},
+	}
+)
 
 func main() {
 	http.HandleFunc("/random/map", GetMap)
@@ -35,7 +44,7 @@ func GetMap(w http.ResponseWriter, r *http.Request) {
 func NewMap() []byte {
 	var (
 		mapData   = make([]byte, 0, mapSize)
-		src       = rand.NewSource(time.Now().UnixNano())
+		src       = srcPool.Get().(rand.Source)
 		r         = src.Int63()
 		randIndex = 0
 	)
@@ -52,6 +61,7 @@ func NewMap() []byte {
 		}
 		mapData = append(mapData, '\n')
 	}
+	srcPool.Put(src)
 
 	return mapData
 }
