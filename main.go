@@ -11,20 +11,17 @@ import (
 )
 
 const (
-	mapWidth  = 128
-	mapHeight = 128
-	mapSize   = mapHeight * (mapWidth + 1)
-)
-
-var (
+	mapWidth      = 128
+	mapHeight     = 128
+	mapSize       = mapHeight * (mapWidth + 1)
 	mapCharacters = "ox"
-
-	srcPool = &sync.Pool{
-		New: func() interface{} {
-			return rand.NewSource(time.Now().UnixNano())
-		},
-	}
 )
+
+var srcPool = &sync.Pool{
+	New: func() interface{} {
+		return rand.NewSource(time.Now().UnixNano())
+	},
+}
 
 func main() {
 	http.HandleFunc("/random/map", GetMap)
